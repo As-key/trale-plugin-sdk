@@ -1,0 +1,39 @@
+# =========================
+# Build results
+# =========================
+bin/
+obj/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# NuGet
+# =========================
+packages/
+*.nupkg
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+# =========================
+# Signing keys (never commit)
+# =========================
+*.snk
+*.pfx
+
+# Trale.*.Abstractions.dll copied from TRALE for building
+sample_if2/lib/*.dll

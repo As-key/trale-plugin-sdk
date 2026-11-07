@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    InterfaceTralePlugin2 sample plugin for TRALE.
+    Build:  dotnet build -c Release -p:TraleDir="<folder that contains TranslationEditor.exe>"
+    Output: bin\Release\net10.0\TraleSampleTsvPlugin.dll  ->  copy to <TRALE folder>\plugins\
+
+    IF2 は「型の同一性」で検出されるため、インターフェース定義をコピーせず、
+    TRALE 本体フォルダにある Trale.Plugin.Abstractions.dll を参照する（出力にはコピーしない）。
+    IF2 is detected by type identity: reference Trale.Plugin.Abstractions.dll from the TRALE folder
+    instead of copying the interface source, and do not ship the DLL with the plugin.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>TraleSampleTsvPlugin</AssemblyName>
+    <RootNamespace>TraleSampleTsvPlugin</RootNamespace>
+    <Version>1.0.0.0</Version>
+  </PropertyGroup>
+
+  <!-- TraleDir: TRALE のインストールフォルダ（省略時は ..\lib\ に Trale.Plugin.Abstractions.dll を置く） -->
+  <PropertyGroup>
+    <TraleDir Condition="'$(TraleDir)' == ''">$(MSBuildThisFileDirectory)..\lib</TraleDir>
+    <TralePluginAbstractions>$([System.IO.Path]::Combine($(TraleDir), 'Trale.Plugin.Abstractions.dll'))</TralePluginAbstractions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Trale.Plugin.Abstractions">
+      <HintPath>$(TralePluginAbstractions)</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CheckTraleAbstractions" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(TralePluginAbstractions)')"
+           Text="Trale.Plugin.Abstractions.dll was not found at '$(TralePluginAbstractions)'. Build with -p:TraleDir=&quot;&lt;TRALE folder&gt;&quot; or copy the DLL from the TRALE folder into sample_if2\lib\." />
+  </Target>
+
+</Project>
